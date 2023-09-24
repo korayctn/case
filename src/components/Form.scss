@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    .errContainer {
+    .statusContainer {
       width: 100%;
       text-align: center;
       margin-top: 20px;
@@ -21,12 +21,13 @@
       border-radius: 8px;
       font-size: 18px;
       font-weight: 300;
-      color: red;
+
       display: flex;
       justify-content: center;
       align-items: center;
       text-transform: uppercase;
       gap: 10px;
+
       h2 {
         font-size: 24px;
       }

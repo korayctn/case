@@ -10,6 +10,10 @@ import axios from "axios";
 import { authConfig } from "../utils/config";
 import dayjs from "dayjs";
 import ErrorIcon from "@mui/icons-material/Error";
+import STATUSTYPE from "../utils/STATUSTYPE";
+import StatusBar from "./Status/StatusBar";
+import { BarLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
   // STATES AND HANDLING CHANGES
@@ -18,44 +22,17 @@ const Form = () => {
   const [dateVal, setDateVal] = useState(null);
   const [states, setStates] = useState([]);
   const [inputStatus, setInputStatus] = useState(null);
-  const [fetchError, setFetchError] = useState(
-    "Wrong date. Check the information again"
-  );
+  const [status, setStatus] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    firstName: "JAMES RICHARD",
-    lastName: "PERRY",
-    dob: "1950-03-04T00:00:00",
-    driverLicense: "00000001",
-    rec: null,
-    db: null,
-    ed: null,
-    tacdmv: null,
-    issueDate: null,
-    address: {
-      rec: null,
-      detail: "200 OAK RUN LN",
-      city: "ROUND TOP",
-      zip: "78954",
-      state: "TX",
-    },
-    foreignLicenseId: null,
-    foreignLicensedType: 6,
+    firstName: "",
+    lastName: "",
   });
-  const [formattedDate, setFormattedDate] = useState(null);
+  const [formattedDate, setFormattedDate] = useState("");
 
-  const configGetDriver = {
-    ...authConfig,
-    params: {
-      "header.lang": "en",
-      "header.trackId": "Bermuda%20Tech",
-      "header.requestDate": new Date().toISOString().split("T")[0],
-      FetchAddress: true,
-      DLNumer: licenseNum,
-      Dob: formattedDate,
-      DLState: state,
-    },
-  };
+  let navigate = useNavigate();
+
   const getStates = async () => {
     try {
       const { data } = await axios.get(
@@ -68,22 +45,37 @@ const Form = () => {
       console.log(err);
     }
   };
-
-  const fetchUserData = async () => {
+  const fetchUserData = async (date) => {
     try {
+      setStatus(STATUSTYPE.LOADING);
+      setLoading(true);
+      setUser(null);
+      setFetchError(null);
       const { data } = await axios.get(
         "https://api-dev.thebermuda.us/rating/api/search/driver/dl",
-        configGetDriver
+        {
+          ...authConfig,
+          params: {
+            "header.lang": "en",
+            "header.trackId": "Bermuda%20Tech",
+            "header.requestDate": new Date().toISOString().split("T")[0],
+            FetchAddress: true,
+            DLNumer: licenseNum,
+            Dob: date,
+            DLState: state,
+          },
+        }
       );
       console.log(data.drivers);
       const user = await data.drivers[0];
-      if (user) {
-        setUser(user);
-      }
+      await setUser(user);
+      setStatus(STATUSTYPE.SUCCESS);
     } catch (err) {
+      setStatus(STATUSTYPE.ERROR);
       console.log(err.response.data.message);
-      setFetchError(err);
+      setFetchError(err.response.data.message);
     }
+    setLoading(false);
   };
   useEffect(() => {
     // GETTING STATES FROM API
@@ -169,10 +161,8 @@ const Form = () => {
                 label="Date of birth"
                 required
                 value={dateVal}
+                disableFuture
                 onChange={(val) => {
-                  {
-                    // Chech the date is entered correctly and formatted according to backend
-                  }
                   if ((val.$d != "Invalid Date") & (val.$y > 1900)) {
                     console.log("doğru tarih");
                     let Month = val.$M + 1;
@@ -181,12 +171,10 @@ const Form = () => {
                     const dayjsFormat = dayjs(`${Year}-${Month}-${Day}`).format(
                       "YYYY-MM-DD"
                     );
-
-                    setFormattedDate(dayjsFormat);
-                    fetchUserData();
+                    fetchUserData(dayjsFormat);
                   }
-                  setDateVal(val);
                 }}
+                format="MM-DD-YYYY"
                 InputProps={{
                   sx: {
                     width: 400,
@@ -194,7 +182,7 @@ const Form = () => {
                     boxShadow: 2,
                   },
                 }}
-                InputLabelProps={{ shrink: user ? true : false }}
+                InputLabelProps={{ shrink: inputStatus ? true : false }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -211,21 +199,17 @@ const Form = () => {
           />
         </div>
       </div>
-      <div className="errContainer">
-        {fetchError && (
-          <>
-            <ErrorIcon sx={{ width: 24, height: 24 }} />
 
-            <h4 className="errMsg">{fetchError}</h4>
-          </>
-        )}
+      <div className="statusContainer">
+        <StatusBar status={status} error={fetchError} />
       </div>
       <button
         className="submitBtn"
         type="submit"
-        disabled={!user ? true : false}
+        disabled={status == `${STATUSTYPE.SUCCESS}` ? false : true}
         onSubmit={(e) => {
           e.preventDefault();
+          navigate("/details");
         }}
       >
         Next
