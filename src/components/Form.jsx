@@ -207,8 +207,7 @@ const Form = () => {
         className="submitBtn"
         type="submit"
         disabled={status == `${STATUSTYPE.SUCCESS}` ? false : true}
-        onSubmit={(e) => {
-          e.preventDefault();
+        onClick={(e) => {
           navigate("/details");
         }}
       >
