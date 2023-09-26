@@ -1,0 +1,13 @@
+.card {
+  width: 450px;
+  height: 450px;
+  -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
+}
+.dots {
+  flex: 1;
+  border-bottom: 1px dotted #000;
+  position: relative;
+  bottom: -5px;
+}

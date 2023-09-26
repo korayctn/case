@@ -14,8 +14,12 @@ import STATUSTYPE from "../utils/STATUSTYPE";
 import StatusBar from "./Status/StatusBar";
 import { BarLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import userSlice, { addToGlobalState } from "../features/userSlice";
 
 const Form = () => {
+  const dispatch = useDispatch();
+
   // STATES AND HANDLING CHANGES
   const [licenseNum, setLicenseNum] = useState("");
   const [state, setState] = useState("TX");
@@ -208,7 +212,9 @@ const Form = () => {
         type="submit"
         disabled={status == `${STATUSTYPE.SUCCESS}` ? false : true}
         onClick={(e) => {
-          navigate("/details");
+          e.preventDefault();
+          dispatch(addToGlobalState(user));
+          navigate(`/details/${licenseNum}`);
         }}
       >
         Next
