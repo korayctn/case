@@ -23,10 +23,19 @@ export const getPolicyCoverages = createAsyncThunk(
   }
 );
 const coveragesClearedData = (data) => {
-  let products = [
-    data.coverageProductsContainer[0].coverageProducts[0],
-    data.coverageProductsContainer[0].coverageProducts[1],
-  ];
+  const stateMinCoverage =
+    data.coverageProductsContainer[0].coverageProducts[0];
+  const enhancedCoverage =
+    data.coverageProductsContainer[0].coverageProducts[1];
+
+  const premiumCoverage = {
+    productType: 1,
+    detail:
+      "Pays to repair or replace your car after an accident and comprehensive (other than collision) coverage, which pays if your car is stolen or damaged by fire, flood, vandalism or something other than a collision. You select the deductible that you pay for your comprehensive and collision coverage",
+    description: "Premium Coverage",
+    coverages: data.customCoverages,
+  };
+  let products = [stateMinCoverage, enhancedCoverage, premiumCoverage];
   console.log(products);
   return products;
 };

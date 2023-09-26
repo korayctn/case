@@ -8,11 +8,6 @@ const Home = () => {
   return (
     <div className="formContainer">
       <Form />
-      <div className="gap-20 flexCon w-full">
-        <DetailCard />
-        <DetailCard />
-        <DetailCard />
-      </div>
     </div>
   );
 };
