@@ -18,7 +18,6 @@ export const getPolicyCoverages = createAsyncThunk(
       `https://api-dev.thebermuda.us/rating/api/rating/getPolicyCoverages?State=${user.address.state}`,
       authConfig
     );
-    console.log(data);
     return data;
   }
 );
@@ -36,9 +35,9 @@ const coveragesClearedData = (data) => {
     coverages: data.customCoverages,
   };
   let products = [stateMinCoverage, enhancedCoverage, premiumCoverage];
-  console.log(products);
   return products;
 };
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -50,7 +49,13 @@ export const userSlice = createSlice({
         lastName,
         address,
       };
-      console.log(state.user);
+    },
+    selectThePolicy: (state, action) => {
+      const { idx, datax } = action.payload;
+      state.selectedPolicyCoverage = {
+        id: idx,
+        data: datax,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -67,5 +72,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { addToGlobalState } = userSlice.actions;
+export const { addToGlobalState, selectThePolicy } = userSlice.actions;
 export default userSlice.reducer;

@@ -46,7 +46,7 @@ const Form = () => {
       const states = await data.states;
       setStates(states);
     } catch (err) {
-      console.log(err);
+      setFetchError(err);
     }
   };
   const fetchUserData = async (date) => {
@@ -70,14 +70,16 @@ const Form = () => {
           },
         }
       );
-      console.log(data.drivers);
       const user = await data.drivers[0];
       await setUser(user);
       setStatus(STATUSTYPE.SUCCESS);
     } catch (err) {
       setStatus(STATUSTYPE.ERROR);
-      console.log(err.response.data.message);
-      setFetchError(err.response.data.message);
+      if (err.response) {
+        setFetchError(err.response.data.message);
+      } else {
+        setFetchError("Unexpected error has occurred check the info again");
+      }
     }
     setLoading(false);
   };
@@ -168,7 +170,6 @@ const Form = () => {
                 disableFuture
                 onChange={(val) => {
                   if ((val.$d != "Invalid Date") & (val.$y > 1900)) {
-                    console.log("doğru tarih");
                     let Month = val.$M + 1;
                     let Day = val.$D;
                     let Year = val.$y;

@@ -12,7 +12,9 @@ import { getPolicyCoverages } from "../../features/userSlice";
 const Details = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, policyCoverages } = useSelector((state) => state.user);
+  const { user, policyCoverages, selectedPolicyCoverage } = useSelector(
+    (state) => state.user
+  );
 
   const getCoverage = async () => {
     await dispatch(getPolicyCoverages(user));
@@ -62,10 +64,17 @@ const Details = () => {
           </div>
           <hr className="w-full h-0.5 mx-auto my-4 bg-gray-700 border-0 rounded " />
         </div>
-        {policyCoverages &&
-          policyCoverages.map((item, index) => {
-            return <DetailCard key={index} data={item} />;
-          })}
+        <div className="flex mt-10 w-full justify-around">
+          {policyCoverages &&
+            policyCoverages.map((item, index) => {
+              return <DetailCard key={index} data={item} id={index} />;
+            })}
+        </div>
+        {selectedPolicyCoverage && (
+          <button className="py-3 px-5 bg-slate-700 rounded-lg text-white absolute right-20 bottom-10">
+            NEXT
+          </button>
+        )}
       </div>
     );
   } else {

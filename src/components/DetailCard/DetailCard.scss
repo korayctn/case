@@ -1,9 +1,13 @@
 .card {
   width: 450px;
   height: 450px;
+}
+.active {
   -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.75);
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
 }
 .dots {
   flex: 1;
