@@ -1,8 +1,9 @@
 .formContainer {
   width: 100%;
   height: 100vh;
+  display: flex;
+  justify-content: center;
   .form {
-    width: 45%;
     margin: 0 auto;
     height: 80%;
     display: flex;
@@ -18,7 +19,6 @@
       border-radius: 8px;
       font-size: 18px;
       font-weight: 300;
-
       display: flex;
       justify-content: center;
       align-items: center;
@@ -58,11 +58,12 @@
     .inputContainer {
       width: 100%;
       display: flex;
+      gap: 20px;
       .firstContainer {
-        width: 50%;
+        max-width: 50%;
       }
       .secondContainer {
-        width: 50%;
+        max-width: 50%;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
